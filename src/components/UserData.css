@@ -1,0 +1,47 @@
+.user-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+.user-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.user-card h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.user-info p {
+  margin: 10px 0;
+  font-size: 15px;
+  color: #555;
+}
+
+.user-info span {
+  font-weight: bold;
+  color: #222;
+}
+
+.back-btn {
+  margin-bottom: 15px;
+  padding: 8px 15px;
+  border: none;
+  background-color: #4a90e2;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background-color: #357abd;
+}

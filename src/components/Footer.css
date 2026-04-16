@@ -1,0 +1,14 @@
+.site-footer {
+  width: 100%;
+  background: #f8fafc;
+  border-top: 1px solid rgba(100, 116, 139, 0.14);
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+}
