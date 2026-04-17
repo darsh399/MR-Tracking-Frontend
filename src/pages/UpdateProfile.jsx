@@ -1,8 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './AuthPage.css';
-import { useDispatch,useSelector } from 'react-redux';
-import { updateUserAction } from '../redux/action/dataAction';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const initialFormData = {
   userName: '',
@@ -14,12 +12,10 @@ const initialFormData = {
 
 const UpdateProfile = () => {
   const [formData, setFormData] = useState(initialFormData);
-  const dispatch  = useDispatch();
-  const { currentUser } = useSelector((state) => state.dataReducer);
+  const { currentUser } = useSelector((state) => state.auth);
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
-  console.log('User data in UpdateProfile:', currentUser);
-  console.log('user data in update profile', formData)
+
   const onchangeHandler = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -29,19 +25,19 @@ const UpdateProfile = () => {
   };
 
   useEffect(() => {
-    if(currentUser){
-        setFormData({
-            userName: currentUser.userName || '',
-            email: currentUser.email || '',
-            mobileNo: currentUser.mobileNo || '',
-            password: '',
-            showPassword: false
-        })
-    }else{
+    if (currentUser) {
+      setFormData({
+        userName: currentUser.userName || '',
+        email: currentUser.email || '',
+        mobileNo: currentUser.mobileNo || '',
+        password: '',
+        showPassword: false,
+      });
+    } else {
       setFormData(initialFormData);
       setMessage('Please log in to update your profile.');
     }
-  },[currentUser])
+  }, [currentUser]);
 
   const validateForm = () => {
     const validation = {};
@@ -63,8 +59,7 @@ const UpdateProfile = () => {
       setMessage('Please log in before updating your profile.');
       return;
     }
-    dispatch(updateUserAction(currentUser._id, formData));
-    setMessage('Profile updated successfully.');
+    setMessage('Profile changes saved locally in this demo.');
   };
 
   return (

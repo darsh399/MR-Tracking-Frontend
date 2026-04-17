@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import './AuthPage.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { registerUserAction } from '../redux/action/dataAction';
+import { signup } from '../redux/slices/authSlice';
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     userName: '',
@@ -10,19 +11,20 @@ const Signup = () => {
     mobileNo: '',
     password: '',
     confirmPassword: '',
-    isAdmin: false,
+    role: 'mr',
     showPassword: false,
   });
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
 
   const onchangeHandler = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'isAdmin' ? value === 'true' : type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -36,7 +38,7 @@ const Signup = () => {
     return validation;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const validation = validateForm();
     setErrors(validation);
@@ -50,27 +52,36 @@ const Signup = () => {
       email: formData.email,
       mobileNo: formData.mobileNo,
       password: formData.password,
-      isAdmin: formData.isAdmin,
+      role: formData.role,
     };
 
-    dispatch(registerUserAction(submitData));
-    setMessage('Signup request sent.');
-   setFormData({
-  userName: '',
-  email: '',
-  mobileNo: '',
-  password: '',
-  confirmPassword: '',
-  isAdmin: false,
-  showPassword: false,
-}); 
-  navigate('/login');
+    try {
+      await dispatch(signup(submitData)).unwrap();
+      setMessage('Signup successful. Please log in.');
+      setFormData({
+        userName: '',
+        email: '',
+        mobileNo: '',
+        password: '',
+        confirmPassword: '',
+        role: 'mr',
+        showPassword: false,
+      });
+      navigate('/login');
+    } catch (signupError) {
+      console.error('Signup failed:', signupError);
+      setMessage('');
+    }
   };
+
   return (
     <div className="auth-page" id="signup">
       <form className="auth-card" onSubmit={handleSubmit}>
         <h2>Create an account</h2>
         <p className="form-subtitle">Select your user type and complete the form below.</p>
+
+        {error && <div className="error-message">{error}</div>}
+        {message && <div className="success-message">{message}</div>}
 
         <label className="form-control">
           <span>Full name</span>
@@ -110,9 +121,9 @@ const Signup = () => {
 
         <label className="form-control">
           <span>User type</span>
-          <select name="isAdmin" value={String(formData.isAdmin)} onChange={onchangeHandler}>
-            <option value="false">Normal user</option>
-            <option value="true">Admin user</option>
+          <select name="role" value={formData.role} onChange={onchangeHandler}>
+            <option value="mr">MR user</option>
+            <option value="admin">Admin user</option>
           </select>
         </label>
 
@@ -152,10 +163,9 @@ const Signup = () => {
           </label>
         </div>
 
-        <button type="submit" className="primary-button">
-          Register
+        <button type="submit" className="primary-button" disabled={loading}>
+          {loading ? 'Creating account…' : 'Register'}
         </button>
-        {message && <div className="success-message">{message}</div>}
       </form>
     </div>
   );

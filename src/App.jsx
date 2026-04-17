@@ -1,11 +1,11 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import Store from './redux/Store';
+import store from './redux/store';
 import AllRoutes from './routes/routes';
 
 function App() {
   return (
-    <Provider store={Store}>
+    <Provider store={store}>
       <Router>
         <AllRoutes />
       </Router>
@@ -14,3 +14,4 @@ function App() {
 }
 
 export default App;
+

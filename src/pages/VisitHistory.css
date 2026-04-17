@@ -1,0 +1,54 @@
+.visit-history-page {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.history-filters {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.history-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.history-filters input {
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+}
+
+.history-table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.history-table th {
+  background: #f1f5f9;
+}
+
+.no-data,
+.status-message,
+.error-message {
+  margin-top: 1rem;
+  text-align: center;
+}
