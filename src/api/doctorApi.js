@@ -1,7 +1,14 @@
 import api from './apiClient';
 
-export const fetchDoctors = async () => {
-  const response = await api.get('/doctors');
+export const fetchDoctors = async (city = '') => {
+  const response = await api.get('/doctors', {
+    params: city ? { city } : {},
+  });
+  return response.data;
+};
+
+export const fetchDoctorById = async (doctorId) => {
+  const response = await api.get(`/doctors/${doctorId}`);
   return response.data;
 };
 

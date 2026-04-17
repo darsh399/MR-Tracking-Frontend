@@ -20,6 +20,11 @@ export const approveUser = async (userId) => {
   return response.data;
 };
 
+export const rejectUser = async (userId) => {
+  const response = await api.delete(`/auth/user/${userId}`);
+  return response.data;
+};
+
 export const toggleUserStatus = async (userId) => {
   const response = await api.put(`/auth/user/${userId}/status`);
   return response.data;

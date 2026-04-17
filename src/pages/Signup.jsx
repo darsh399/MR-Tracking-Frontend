@@ -9,6 +9,7 @@ const Signup = () => {
     userName: '',
     email: '',
     mobileNo: '',
+    companyName: '',
     password: '',
     confirmPassword: '',
     role: 'mr',
@@ -33,6 +34,7 @@ const Signup = () => {
     if (!formData.userName.trim()) validation.userName = 'Full name is required';
     if (!formData.email.trim()) validation.email = 'Email is required';
     if (!formData.mobileNo.trim()) validation.mobileNo = 'Mobile number is required';
+    if (formData.role === 'admin' && !formData.companyName.trim()) validation.companyName = 'Company name is required for admins';
     if (!formData.password) validation.password = 'Password is required';
     if (formData.password !== formData.confirmPassword) validation.confirmPassword = 'Passwords must match';
     return validation;
@@ -51,6 +53,7 @@ const Signup = () => {
       userName: formData.userName,
       email: formData.email,
       mobileNo: formData.mobileNo,
+      companyName: formData.companyName,
       password: formData.password,
       role: formData.role,
     };
@@ -62,6 +65,7 @@ const Signup = () => {
         userName: '',
         email: '',
         mobileNo: '',
+        companyName: '',
         password: '',
         confirmPassword: '',
         role: 'mr',
@@ -125,6 +129,21 @@ const Signup = () => {
             <option value="mr">MR user</option>
             <option value="admin">Admin user</option>
           </select>
+        </label>
+
+        <label className="form-control">
+          <span>Company name</span>
+          <input
+            type="text"
+            name="companyName"
+            value={formData.companyName}
+            onChange={onchangeHandler}
+            placeholder="Company name"
+          />
+          {errors.companyName && <small className="field-error">{errors.companyName}</small>}
+          <small className="field-note">
+            Required for admin registration. MR users can set company affiliation here if available.
+          </small>
         </label>
 
         <label className="form-control">

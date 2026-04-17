@@ -3,6 +3,8 @@ import authReducer from './slices/authSlice';
 import visitReducer from './slices/visitSlice';
 import doctorReducer from './slices/doctorSlice';
 import adminReducer from './slices/adminSlice';
+import profileReducer from './slices/profileSlice';
+import leaveReducer from './slices/leaveSlice';
 
 export default configureStore({
   reducer: {
@@ -10,5 +12,7 @@ export default configureStore({
     visits: visitReducer,
     doctors: doctorReducer,
     admin: adminReducer,
+    profile: profileReducer,
+    leave: leaveReducer,
   },
 });

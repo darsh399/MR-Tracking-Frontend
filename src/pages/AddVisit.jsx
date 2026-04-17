@@ -1,19 +1,35 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { submitVisit, clearVisitMessage } from '../redux/slices/visitSlice';
 import './AddVisit.css';
 
 const AddVisit = () => {
   const dispatch = useDispatch();
+  const locationState = useLocation();
   const { loading, error, message } = useSelector((state) => state.visits);
   const [location, setLocation] = useState({ lat: null, lng: null });
   const [geoError, setGeoError] = useState('');
+  const [doctorId, setDoctorId] = useState(null);
   const [formData, setFormData] = useState({
     doctorName: '',
     specialty: '',
     clinicName: '',
     contactNumber: '',
   });
+
+  useEffect(() => {
+    if (locationState.state?.prefillDoctor) {
+      const { prefillDoctor } = locationState.state;
+      setDoctorId(prefillDoctor._id);
+      setFormData({
+        doctorName: prefillDoctor.doctorName || '',
+        specialty: prefillDoctor.specialty || '',
+        clinicName: prefillDoctor.clinicName || '',
+        contactNumber: prefillDoctor.contactNumber || '',
+      });
+    }
+  }, [locationState.state]);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -46,12 +62,13 @@ const AddVisit = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!location.lat || !location.lng) {
+    if (location.lat == null || location.lng == null) {
       setGeoError('Please allow location access before submitting');
       return;
     }
 
     dispatch(submitVisit({
+      doctorId,
       ...formData,
       latitude: location.lat,
       longitude: location.lng,
@@ -72,8 +89,17 @@ const AddVisit = () => {
 
         <div className="location-panel">
           <h3>Current location</h3>
-          {location.lat ? (
-            <p>{`Latitude: ${location.lat.toFixed(5)}, Longitude: ${location.lng.toFixed(5)}`}</p>
+          {location.lat != null ? (
+            <>
+              <p>{`Latitude: ${location.lat.toFixed(5)}, Longitude: ${location.lng.toFixed(5)}`}</p>
+              <div className="map-panel">
+                <iframe
+                  title="Current visit location"
+                  src={`https://www.google.com/maps?q=${location.lat},${location.lng}&z=16&output=embed`}
+                  loading="lazy"
+                />
+              </div>
+            </>
           ) : (
             <p>Fetching current location…</p>
           )}

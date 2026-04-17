@@ -8,10 +8,10 @@ const Home = () => {
       <section className="hero-section">
         <div className="hero-copy">
           <p>Project starter</p>
-          <h1>Build an admin and normal user flow in one clean app.</h1>
+          <h1>MR Visit Tracker is a company-first SAAS workflow for field sales teams.</h1>
           <p>
-            This starter project is designed for a real web app experience: separate admin
-            and user roles, login/signup flows, profile management, and a polished landing page.
+            Track doctor visits, record location-validated activity, and let admins manage employees by company.
+            This product is built for multi-tenant teams with admin and MR role separation.
           </p>
           <div className="hero-buttons">
             <Link className="button primary" to="/signup">
@@ -29,6 +29,13 @@ const Home = () => {
       </section>
 
       <section className="feature-row">
+        <article className="feature-card highlight-card">
+          <span>SAAS</span>
+          <h3>Company-first setup</h3>
+          <p>
+            Admins can create a company profile and keep MR employee access scoped to their organization.
+          </p>
+        </article>
         <article className="feature-card">
           <span>Admin</span>
           <h3>Admin control</h3>

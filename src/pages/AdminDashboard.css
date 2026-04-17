@@ -17,6 +17,16 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.company-banner {
+  margin-top: 0.8rem;
+  display: inline-block;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
 .stat-card,
 .chart-card,
 .pending-card {

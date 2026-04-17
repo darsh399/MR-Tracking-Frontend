@@ -8,9 +8,9 @@ const initialState = {
   message: null,
 };
 
-export const loadDoctors = createAsyncThunk('doctors/load', async (_, { rejectWithValue }) => {
+export const loadDoctors = createAsyncThunk('doctors/load', async (city = '', { rejectWithValue }) => {
   try {
-    const response = await fetchDoctors();
+    const response = await fetchDoctors(city);
     return response;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || error.message);

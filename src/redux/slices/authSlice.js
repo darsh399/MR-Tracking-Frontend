@@ -52,6 +52,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 export const getUserByIdAction = createAsyncThunk('auth/getUserById', async (id, { rejectWithValue }) => {
   try {
     const response = await getUserById(id); 
+    console.log('User data fetched by ID:', response);
     return response;
     } catch (error) {
     return rejectWithValue(error.response?.data?.message || error.message);

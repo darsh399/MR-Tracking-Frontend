@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { loadAdminStats, loadAdminUsers, approveAdminUser } from '../redux/slices/adminSlice';
+import { loadAdminStats, loadAdminUsers, approveAdminUser, rejectAdminUser, toggleAdminUserStatus } from '../redux/slices/adminSlice';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -19,7 +19,9 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Le
 const AdminDashboard = () => {
   const dispatch = useDispatch();
   const { stats, users, loading, error } = useSelector((state) => state.admin);
-  console.log('Admin stats:', users);
+  const { currentUser } = useSelector((state) => state.auth);
+  const [statusFilter, setStatusFilter] = useState('all');
+
   useEffect(() => {
     dispatch(loadAdminStats());
     dispatch(loadAdminUsers());
@@ -32,11 +34,22 @@ const AdminDashboard = () => {
   const performanceLabels = stats?.mrPerformance.map((item) => item.userName) || [];
   const performanceValues = stats?.mrPerformance.map((item) => item.visits) || [];
 
+  const filteredUsers = useMemo(() => {
+    if (statusFilter === 'all') return users;
+    if (statusFilter === 'pending') return users.filter((user) => !user.approved);
+    if (statusFilter === 'inactive') return users.filter((user) => !user.isActive);
+    if (statusFilter === 'active') return users.filter((user) => user.isActive && user.approved);
+    return users;
+  }, [users, statusFilter]);
+
   return (
     <div className="admin-dashboard-page">
       <section className="page-header">
         <h1>Admin Dashboard</h1>
         <p>Monitor MR performance, visit metrics, doctor popularity, and account approvals.</p>
+        {currentUser?.companyName && (
+          <p className="company-banner">Company: {currentUser.companyName}</p>
+        )}
       </section>
 
       {loading && <p className="status-message">Loading admin metrics…</p>}
@@ -92,11 +105,13 @@ const AdminDashboard = () => {
           </thead>
           <tbody>
             {stats?.mrPerformance?.map((item) => (
-              <tr key={item.userName}>
-                <Link to={`/user/${item._id}`} className="performance-link">
-                <td>{item.userName}</td>
+              <tr key={item._id}>
+                <td>
+                  <Link to={`/user/${item._id}`} className="performance-link">
+                    {item.userName}
+                  </Link>
+                </td>
                 <td>{item.visits}</td>
-                </Link>
               </tr>
             ))}
           </tbody>
@@ -104,22 +119,53 @@ const AdminDashboard = () => {
       </div>
 
       <div className="pending-users">
-        <h2>Pending approvals</h2>
+        <div className="pending-header">
+          <h2>Manage MR accounts</h2>
+          <div className="status-filter">
+            <label>
+              Status
+              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                <option value="all">All</option>
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
         <div className="pending-list">
-          {users.filter((user) => !user.approved).length === 0 ? (
-            <p>No pending users at this time.</p>
+          {filteredUsers.length === 0 ? (
+            <p>No users match this status.</p>
           ) : (
-            users
-              .filter((user) => !user.approved)
-              .map((user) => (
-                <div key={user._id} className="pending-card">
-                  <h4>{user.userName || user.email}</h4>
-                  <p>{user.email}</p>
-                  <p>{user.role.toUpperCase()}</p>
-                  <p><button onClick={() => dispatch(approveAdminUser(user._id))}>Approve</button></p>
-                  <p><button onClick={() => dispatch(rejectAdminUser(user._id))}>Reject</button></p>
+            filteredUsers.map((user) => (
+              <div key={user._id} className="pending-card">
+                <div className="pending-card-top">
+                  <div>
+                    <h4>{user.userName || user.email}</h4>
+                    <p>{user.email}</p>
+                    <p>{user.role.toUpperCase()}</p>
+                    {user.companyName && <p>Company: {user.companyName}</p>}
+                    <p>Status: {user.approved ? (user.isActive ? 'Active' : 'Inactive') : 'Pending approval'}</p>
+                  </div>
                 </div>
-              ))
+                <div className="pending-card-actions">
+                  {!user.approved && (
+                    <button className="approve-button" onClick={() => dispatch(approveAdminUser(user._id))}>
+                      Approve
+                    </button>
+                  )}
+                  <button className="status-button" onClick={() => dispatch(toggleAdminUserStatus(user._id))}>
+                    {user.isActive ? 'Deactivate' : 'Activate'}
+                  </button>
+                  {!user.approved && (
+                    <button className="reject-button" onClick={() => dispatch(rejectAdminUser(user._id))}>
+                      Reject
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
           )}
         </div>
       </div>

@@ -21,11 +21,16 @@ const Profile = () => {
             <p>
               <strong>Role:</strong> {role}
             </p>
+            {currentUser.companyName && (
+              <p>
+                <strong>Company:</strong> {currentUser.companyName}
+              </p>
+            )}
             <p>
               {role === 'admin'
-                ? 'Admin users can manage users, configure settings, and see admin-only options.'
+                ? 'Admin users can manage users, configure company access, and review employee status within their organization.'
                 : role === 'mr'
-                ? 'MR users can add visit logs, review history, and share location-validated reports.'
+                ? 'MR users can add visit logs, review history, and share location-validated reports with their company.'
                 : 'Normal users can update their account, manage services, and access user-only content.'}
             </p>
             {currentUser.approved === false && (

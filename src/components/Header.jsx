@@ -34,7 +34,10 @@ const Header = () => {
         </Link>
         <nav className="nav-links">
           <Link to="/">Home</Link>
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
           {currentUser ? <Link to={dashboardPath}>Dashboard</Link> : <Link to="/login">Login</Link>}
+          {currentUser && !currentUser.profileCompleted && <Link to="/complete-profile">Onboarding</Link>}
           {currentUser ? <Link to="/profile">Profile</Link> : <Link to="/signup">Sign Up</Link>}
           {currentUser && <button className="logout-button" onClick={handleLogout}>Logout</button>}
         </nav>

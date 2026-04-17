@@ -97,6 +97,11 @@
   box-shadow: 0 28px 72px rgba(46, 73, 157, 0.14);
 }
 
+.highlight-card {
+  background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+  border-color: rgba(59, 130, 246, 0.24);
+}
+
 .feature-card span {
   display: inline-flex;
   align-items: center;

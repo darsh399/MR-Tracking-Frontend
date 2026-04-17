@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchDashboardStats, fetchAdminVisits, fetchUsersForAdmin, approveUser, toggleUserStatus } from '../../api/adminApi';
+import { fetchDashboardStats, fetchAdminVisits, fetchUsersForAdmin, approveUser, rejectUser, toggleUserStatus } from '../../api/adminApi';
 
 const initialState = {
   stats: null,
@@ -40,6 +40,15 @@ export const approveAdminUser = createAsyncThunk('admin/approveUser', async (use
   try {
     const response = await approveUser(userId);
     return response.user;
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || error.message);
+  }
+});
+
+export const rejectAdminUser = createAsyncThunk('admin/rejectUser', async (userId, { rejectWithValue }) => {
+  try {
+    const response = await rejectUser(userId);
+    return userId;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || error.message);
   }
@@ -108,10 +117,16 @@ const adminSlice = createSlice({
           user._id === action.payload._id ? action.payload : user
         );
       })
+      .addCase(rejectAdminUser.fulfilled, (state, action) => {
+        state.users = state.users.filter((user) => user._id !== action.payload);
+      })
       .addCase(approveAdminUser.rejected, (state, action) => {
         state.error = action.payload;
       })
       .addCase(toggleAdminUserStatus.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(rejectAdminUser.rejected, (state, action) => {
         state.error = action.payload;
       });
   },
