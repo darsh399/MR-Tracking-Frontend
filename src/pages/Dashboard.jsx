@@ -3,37 +3,61 @@ import { Link } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { currentUser } = useSelector((state) => state.dataReducer);
-  const role = currentUser?.isAdmin ? 'admin' : 'user';
-  const name = currentUser?.fullName || currentUser?.userName || currentUser?.email || 'User';
-  console.log('Dashboard user data:', currentUser);
+  const { currentUser } = useSelector((state) => state.auth);
+  const role = currentUser?.role || 'user';
+  const name = currentUser?.userName || currentUser?.email || 'User';
+
   const adminCards = [
     {
-      title: 'User management',
-      description: 'Review and control user access, roles, and account status from a dedicated admin panel.',
+      title: 'Admin analytics',
+      description: 'Access the admin dashboard with metrics, approvals, and management tools.',
+      link: '/admin/dashboard',
     },
     {
-      title: 'Reports & metrics',
-      description: 'Track important system activity and analytics on the admin dashboard.',
+      title: 'User approvals',
+      description: 'Review pending MR registrations and approve or suspend accounts.',
+      link: '/admin/dashboard',
     },
     {
-      title: 'Admin settings',
-      description: 'Configure site settings, approvals, and advanced control options.',
+      title: 'Visit reports',
+      description: 'See visit summaries and doctor activity from the admin console.',
+      link: '/admin/dashboard',
     },
   ];
 
-  const userCards = [
+  const mrCards = [
     {
-      title: 'My account',
-      description: 'View and update your profile, email, and password information.',
+      title: 'Add a visit',
+      description: 'Record a new MR doctor visit and capture your geolocation automatically.',
+      link: '/mr/add-visit',
     },
     {
-      title: 'My services',
-      description: 'Access your available services and manage your personal workflows.',
+      title: 'Visit history',
+      description: 'Review your past visit records and location validation status.',
+      link: '/mr/visit-history',
     },
     {
-      title: 'Activity',
-      description: 'Track your recent actions and stay on top of your work.',
+      title: 'Profile settings',
+      description: 'Update your profile and manage your MR account information.',
+      link: '/profile',
+    },
+  ];
+
+  const defaultCards = [
+    {
+      title: 'Profile',
+      description: 'View and update your account details.',
+      link: '/profile',
+    },
+    {
+      title: 'Visit history',
+      description: 'Track your past activity and assignments.',
+      link: '/mr/visit-history',
+    },
+    {
+      title: 'Support',
+      description: 'Reach out to the team for help with your account or workflows.',
+      link: '/profile',
     },
   ];
 
@@ -42,21 +66,20 @@ const Dashboard = () => {
       <section className="dashboard-hero">
         <div className="dashboard-copy">
           <p className="eyebrow">Welcome back</p>
-          <h1>{role === 'admin' ? `Admin dashboard` : `User dashboard`}</h1>
+          <h1>{role === 'admin' ? 'Admin dashboard' : role === 'mr' ? 'MR dashboard' : 'User dashboard'}</h1>
           <p>
             {role === 'admin'
-              ? 'This section is designed for admin users who need access to management tools, reports, and user controls.'
-              : 'This section is built for normal users to manage their account, access services, and keep their profile updated.'}
+              ? 'Use the admin panel to manage users, approvals, and visit analytics.'
+              : role === 'mr'
+              ? 'Use your MR dashboard to log visits, validate locations, and review history.'
+              : 'Use your dashboard to manage your account and explore available tools.'}
           </p>
           <div className="dashboard-actions">
-            <Link className="button primary" to="/profile">
-              View profile
+            <Link className="button primary" to={role === 'admin' ? '/admin/dashboard' : role === 'mr' ? '/dashboard' : '/profile'}>
+              Open dashboard
             </Link>
-            <Link className="button outline" to="/update-profile">
-              Update profile
-            </Link>
-            <Link className="button outline" to="/users">
-              View All Users
+            <Link className="button outline" to="/profile">
+              Profile settings
             </Link>
           </div>
         </div>
@@ -66,17 +89,22 @@ const Dashboard = () => {
           <h2>Hello, {name}</h2>
           <p className="role-description">
             {role === 'admin'
-              ? 'You have admin access to manage users and configure the application.'
-              : 'You have normal user access to your personal dashboard and services.'}
+              ? 'Admin access gives you the ability to view all system activity and manage users.'
+              : role === 'mr'
+              ? 'Record visits and keep your activity up to date with the MR pipeline.'
+              : 'Manage your profile and account details in this space.'}
           </p>
         </div>
       </section>
 
       <section className="dashboard-cards">
-        {(role === 'admin' ? adminCards : userCards).map((item) => (
+        {(role === 'admin' ? adminCards : role === 'mr' ? mrCards : defaultCards).map((item) => (
           <article key={item.title} className="dashboard-card">
             <h3>{item.title}</h3>
             <p>{item.description}</p>
+            <Link to={item.link} className="card-link">
+              View
+            </Link>
           </article>
         ))}
       </section>

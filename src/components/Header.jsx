@@ -2,31 +2,39 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
-import { logoutUserAction } from '../redux/action/dataAction';
-const Header = () => {
-  const { currentUser } = useSelector((state) => state.dataReducer);
-  const dispatch = useDispatch();
-  const navigation = useNavigate();
+import { logout } from '../redux/slices/authSlice';
 
-  console.log('User data in Header:', currentUser);
+const Header = () => {
+  const { currentUser } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await dispatch(logoutUserAction());
-      navigation('/login', { replace: true, state: { message: 'Logout successful' } });
+      await dispatch(logout()).unwrap();
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('token');
+      navigate('/login', { replace: true, state: { message: 'Logout successful' } });
     } catch (error) {
       console.error('Logout failed', error);
     }
-  }
+  };
+
+  const dashboardPath = currentUser
+    ? currentUser.role === 'admin'
+      ? '/admin-dashboard'
+      : '/dashboard'
+    : '/login';
+
   return (
     <header className="site-header">
       <div className="header-inner">
         <Link className="brand" to="/">
-          MyApp
+          MR Visit Tracker
         </Link>
         <nav className="nav-links">
           <Link to="/">Home</Link>
-          {currentUser ? <Link to="/dashboard">Dashboard</Link> : <Link to="/login">Login</Link>}
+          {currentUser ? <Link to={dashboardPath}>Dashboard</Link> : <Link to="/login">Login</Link>}
           {currentUser ? <Link to="/profile">Profile</Link> : <Link to="/signup">Sign Up</Link>}
           {currentUser && <button className="logout-button" onClick={handleLogout}>Logout</button>}
         </nav>
