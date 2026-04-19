@@ -17,6 +17,7 @@ import VisitHistory from '../pages/VisitHistory';
 import GetUserById from '../pages/GetUserById';
 import MrDashboard from '../pages/MrDashboard';
 import DoctorDetail from '../pages/DoctorDetail';
+import ResetPassword from '../components/ResetPassword';
 
 const AllRoutes = () => {
   return (
@@ -46,6 +47,7 @@ const AllRoutes = () => {
           <Route path="/update-profile" element={<UpdateProfile />} />
           <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['mr']} />}>

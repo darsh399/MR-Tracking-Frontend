@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { completeProfile as completeProfileApi, fetchUserProfile } from '../../services/profileService';
+import { completeProfile as completeProfileApi, resetPassword, fetchUserProfile } from '../../services/profileService';
+import { act } from 'react';
 
 const initialState = {
   profile: null,
@@ -26,6 +27,18 @@ export const loadUserProfile = createAsyncThunk(
     try {
       const response = await fetchUserProfile();
       return response.profile;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const resetUserPassword = createAsyncThunk(
+  'profile/resetUserPassword',
+  async ({ currentPassword, newPassword }, { rejectWithValue }) => {
+    try {
+      const response = await resetPassword(currentPassword, newPassword);
+      return response.message;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
@@ -67,6 +80,21 @@ const profileSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(loadUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(resetUserPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = null;
+      })
+      .addCase(resetUserPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = action.payload;
+        state.error = null;
+        state.profile = action.payload; // Update profile if returned by API, otherwise keep existing
+      })
+      .addCase(resetUserPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
