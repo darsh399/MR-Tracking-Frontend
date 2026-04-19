@@ -116,13 +116,57 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .visit-history-page {
-    padding: 1.8rem 1rem 2.2rem;
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .page-header p {
+    font-size: 0.95rem;
+  }
+
+  .history-filters {
+    gap: 14px;
+  }
+
+  .history-filters input {
+    padding: 0.8rem 0.9rem;
+  }
+
+  .history-table-wrapper {
+    padding: 1rem;
   }
 
   .history-table th,
   .history-table td {
-    padding: 0.85rem 0.9rem;
+    padding: 0.7rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .visit-location-preview {
+    padding: 1rem;
+  }
+
+  .visit-location-preview h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .visit-history-page {
+    padding: 2rem 1.2rem 2.5rem;
+  }
+
+  .history-filters {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .history-table-wrapper {
+    padding: 1.2rem;
   }
 }

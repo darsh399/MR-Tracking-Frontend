@@ -5,6 +5,7 @@ import './VisitHistory.css';
 
 const VisitHistory = () => {
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
   const { history, loading, error } = useSelector((state) => state.visits);
   const [selectedVisit, setSelectedVisit] = useState(null);
   const [filters, setFilters] = useState({ doctorName: '', startDate: '', endDate: '' });
@@ -18,11 +19,17 @@ const VisitHistory = () => {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
+  const pageTitle = currentUser?.role === 'admin' ? 'All Company Visits' : 'My Visits';
+  const pageDescription = currentUser?.role === 'admin'
+    ? 'Review all doctor visits across your company and location match status.'
+    : 'Review your doctor visits and location match status.';
+
+
   return (
     <div className="visit-history-page">
       <section className="page-header">
-        <h1>Visit History</h1>
-        <p>Review your doctor visits and location match status.</p>
+        <h1>{pageTitle}</h1>
+        <p>{pageDescription}</p>
       </section>
 
       <div className="history-filters">
@@ -59,9 +66,9 @@ const VisitHistory = () => {
           <tbody>
             {history.map((visit) => (
               <tr key={visit._id}>
-                <td>{visit.doctorName}</td>
-                <td>{visit.specialty}</td>
-                <td>{visit.clinicName}</td>
+                <td>{visit.doctor?.doctorName || 'N/A'}</td>
+                <td>{visit.doctor?.specialty || 'N/A'}</td>
+                <td>{visit.doctor?.clinicName || 'N/A'}</td>
                 <td>
                   {visit.location?.lat != null && visit.location?.lng != null
                     ? `${visit.location.lat.toFixed(4)}, ${visit.location.lng.toFixed(4)}`
@@ -85,7 +92,7 @@ const VisitHistory = () => {
         <section className="visit-location-preview">
           <h2>Visit Location</h2>
           <p>
-            {selectedVisit.doctorName} - {selectedVisit.clinicName}
+            {selectedVisit.doctor?.doctorName || 'N/A'} - {selectedVisit.doctor?.clinicName || 'N/A'}
           </p>
           {selectedVisit.location?.lat != null && selectedVisit.location?.lng != null ? (
             <>

@@ -16,8 +16,11 @@ import AddVisit from '../pages/AddVisit';
 import VisitHistory from '../pages/VisitHistory';
 import GetUserById from '../pages/GetUserById';
 import MrDashboard from '../pages/MrDashboard';
+import Doctors from '../pages/Doctors';
 import DoctorDetail from '../pages/DoctorDetail';
 import ResetPassword from '../components/ResetPassword';
+import Privacy from '../pages/Privacy';
+import Terms from '../pages/Terms';
 
 const AllRoutes = () => {
   return (
@@ -28,6 +31,8 @@ const AllRoutes = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
 
         <Route
           path="/dashboard"
@@ -53,10 +58,12 @@ const AllRoutes = () => {
         <Route element={<ProtectedRoute allowedRoles={['mr']} />}>
           <Route path="/mr-dashboard" element={<MrDashboard />} />
           <Route path="/mr/add-visit" element={<AddVisit />} />
-          <Route path="/mr/visit-history" element={<VisitHistory />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['mr', 'admin']} />}>
+          <Route path="/visits" element={<VisitHistory />} />
+          <Route path="/mr/visit-history" element={<VisitHistory />} />
+          <Route path="/doctors" element={<Doctors />} />
           <Route path="/doctors/:id" element={<DoctorDetail />} />
         </Route>
 

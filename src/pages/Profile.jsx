@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUserProfile } from '../redux/slices/profileSlice';
 import { loadCurrentUser } from '../redux/slices/authSlice';
@@ -163,6 +164,17 @@ const Profile = () => {
                 </div>
               </div>
             )}
+          </section>
+
+          <section className="settings-card">
+            <div className="card-title">
+              <h2>Settings</h2>
+            </div>
+            <p className="settings-note">Quick access to account settings for your profile and password.</p>
+            <div className="settings-list">
+              <Link className="settings-link" to="/update-profile">Update Profile</Link>
+              <Link className="settings-link" to="/reset-password">Reset Password</Link>
+            </div>
           </section>
 
           <section className="leave-card">

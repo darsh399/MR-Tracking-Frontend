@@ -8,7 +8,7 @@ const Home = () => {
       <section className="hero-section">
         <div className="hero-copy">
           <p>Project starter</p>
-          <h1>MR Visit Tracker is a company-first SAAS workflow for field sales teams.</h1>
+          <h1>MediTrack Pro is a company-first SAAS workflow for field sales teams.</h1>
           <p>
             Track doctor visits, record location-validated activity, and let admins manage employees by company.
             This product is built for multi-tenant teams with admin and MR role separation.
