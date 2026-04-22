@@ -12,6 +12,7 @@ export const requestLeave = createAsyncThunk(
   'leave/requestLeave',
   async (leaveData, { rejectWithValue }) => {
     try {
+      console.log('Requesting leave with data:', leaveData);
       const response = await applyLeave(leaveData);
       return response.leaveRequest;
     } catch (error) {

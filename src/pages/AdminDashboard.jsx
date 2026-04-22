@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loadAdminStats, loadAdminUsers, approveAdminUser, rejectAdminUser, toggleAdminUserStatus } from '../redux/slices/adminSlice';
+import { loadLeaveRequests, updateLeaveStatus } from '../redux/slices/leaveSlice';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -18,14 +19,25 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Le
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { stats, users, loading, error } = useSelector((state) => state.admin);
+  const { requests: leaveRequests, loading: leaveLoading, error: leaveError, success: leaveSuccess } = useSelector((state) => state.leave);
   const { currentUser } = useSelector((state) => state.auth);
   const [statusFilter, setStatusFilter] = useState('all');
+
+  const pendingLeaveRequests = leaveRequests.filter(request => request.status === 'pending');
 
   useEffect(() => {
     dispatch(loadAdminStats());
     dispatch(loadAdminUsers());
+    dispatch(loadLeaveRequests());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (leaveSuccess === 'Leave request updated successfully') {
+      dispatch(loadLeaveRequests());
+    }
+  }, [leaveSuccess, dispatch]);
 
   const visitLabels = stats?.visitsPerDay.map((item) => item._id) || [];
   const visitValues = stats?.visitsPerDay.map((item) => item.count) || [];
@@ -71,6 +83,10 @@ const AdminDashboard = () => {
         <article className="stat-card">
           <h3>Active Users</h3>
           <p>{stats?.activeUsers ?? '—'}</p>
+        </article>
+        <article className="stat-card clickable" onClick={() => navigate('/admin/leaves')}>
+          <h3>Pending Leave Requests</h3>
+          <p>{pendingLeaveRequests.length}</p>
         </article>
       </div>
 

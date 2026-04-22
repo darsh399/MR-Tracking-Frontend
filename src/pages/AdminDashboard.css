@@ -36,6 +36,16 @@
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
 }
 
+.stat-card.clickable {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card.clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+}
+
 .charts-grid {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
@@ -69,4 +79,86 @@
 .status-message,
 .error-message {
   margin-top: 1rem;
+}
+
+.pending-leave-requests {
+  margin-top: 2rem;
+}
+
+.leave-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.leave-filter input {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  width: 250px;
+}
+
+.leave-requests-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.leave-request-card {
+  background: #fff;
+  padding: 1.6rem;
+  border-radius: 20px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leave-request-info h4 {
+  margin-bottom: 0.5rem;
+}
+
+.leave-request-info p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.status-pending {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.status-approved {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.status-rejected {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.leave-request-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approve-button,
+.reject-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.approve-button {
+  background: #10b981;
+  color: white;
+}
+
+.reject-button {
+  background: #ef4444;
+  color: white;
 }

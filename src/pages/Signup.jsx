@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './AuthPage.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../redux/slices/authSlice';
+import { signup, clearError } from '../redux/slices/authSlice';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +20,10 @@ const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   const onchangeHandler = (e) => {
     const { name, value, type, checked } = e.target;

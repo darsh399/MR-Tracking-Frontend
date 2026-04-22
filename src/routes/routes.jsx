@@ -21,6 +21,8 @@ import DoctorDetail from '../pages/DoctorDetail';
 import ResetPassword from '../components/ResetPassword';
 import Privacy from '../pages/Privacy';
 import Terms from '../pages/Terms';
+import LeaveManagement from '../pages/LeaveManagement';
+import LeaveRequests from '../pages/LeaveRequests';
 
 const AllRoutes = () => {
   return (
@@ -53,6 +55,7 @@ const AllRoutes = () => {
           <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/leaves" element={<LeaveRequests />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['mr']} />}>
@@ -70,6 +73,7 @@ const AllRoutes = () => {
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/leaves" element={<LeaveManagement />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

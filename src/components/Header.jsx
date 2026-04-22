@@ -5,6 +5,23 @@ import './Header.css';
 import { logout } from '../redux/slices/authSlice';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
+import { useDarkMode } from '../context/DarkModeContext';
+
+const DarkModeToggle = () => {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  return (
+    <button
+      type="button"
+      className="dark-mode-header-toggle"
+      onClick={toggleDarkMode}
+      aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
+    >
+      {isDarkMode ? '☀️' : '🌙'}
+    </button>
+  );
+};
 
 const Header = () => {
   const { currentUser } = useSelector((state) => state.auth);
@@ -43,6 +60,7 @@ const Header = () => {
   }, []);
 
   const userInitial = currentUser?.userName?.charAt(0).toUpperCase() || 'U';
+  const isAuthenticated = Boolean(currentUser);
 
   return (
     <header className="site-header">
@@ -55,15 +73,29 @@ const Header = () => {
           <NavLink end to="/" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
             Home
           </NavLink>
-          <NavLink to={dashboardPath} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
-            Dashboard
-          </NavLink>
-          <NavLink to="/doctors" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
-            Doctors
-          </NavLink>
-          <NavLink to="/visits" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
-            Visits
-          </NavLink>
+
+          {isAuthenticated ? (
+            <>
+              <NavLink to={dashboardPath} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Dashboard
+              </NavLink>
+              <NavLink to="/doctors" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Doctors
+              </NavLink>
+              <NavLink to="/visits" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Visits
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                About Us
+              </NavLink>
+              <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Contact
+              </NavLink>
+            </>
+          )}
         </nav>
 
         <button
@@ -76,6 +108,8 @@ const Header = () => {
           <span></span>
           <span></span>
         </button>
+
+        <DarkModeToggle />
 
         <div className="header-action-group" ref={dropdownRef}>
           {currentUser ? (
@@ -102,6 +136,11 @@ const Header = () => {
               <Link className="dropdown-item" to="/update-profile" onClick={() => setDropdownOpen(false)}>
                 Update Profile
               </Link>
+              {currentUser.role !== 'admin' && (
+                <Link className="dropdown-item" to="/leaves" onClick={() => setDropdownOpen(false)}>
+                  Leaves
+                </Link>
+              )}
               <Link className="dropdown-item" to="/reset-password" onClick={() => setDropdownOpen(false)}>
                 Reset Password
               </Link>

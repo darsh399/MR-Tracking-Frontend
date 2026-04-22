@@ -7,7 +7,6 @@ const Footer = () => {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-content">
-          {/* Company Info */}
           <div className="footer-section">
             <div className="footer-brand">
               <img src={logo} alt="MediTrack Pro Logo" className="footer-logo-image" />

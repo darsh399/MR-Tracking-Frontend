@@ -1,6 +1,7 @@
 import api from '../api/apiClient';
 
 export const applyLeave = async (leaveData) => {
+  console.log('Applying for leave with data:', leaveData);  
   const response = await api.post('/leave/request', leaveData);
   return response.data;
 };
