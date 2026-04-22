@@ -8,14 +8,18 @@ import { loadCurrentUser } from '../redux/slices/authSlice';
 const MainLayout = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { currentUser } = useSelector((state) => state.auth);
+  const { currentUser, token } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const shouldSkipFetch = location.pathname === '/login' || location.pathname === '/signup';
+    const shouldSkipFetch =
+      location.pathname === '/login' ||
+      location.pathname === '/signup' ||
+      !token;
+
     if (shouldSkipFetch || currentUser) return;
 
     dispatch(loadCurrentUser());
-  }, [dispatch, location.pathname, currentUser]);
+  }, [dispatch, location.pathname, currentUser, token]);
 
   return (
     <>

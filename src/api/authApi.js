@@ -24,3 +24,9 @@ export const logoutUser = async () => {
   const response = await api.post('/auth/logout');
   return response.data;
 };
+
+export const updateUser = async (formData) => {
+  console.log('user update triggered', formData)
+  const response = await api.patch('/auth/update-user', formData);
+  return response.data;
+}

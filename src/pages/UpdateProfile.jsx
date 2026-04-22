@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './AuthPage.css';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUserAction } from '../redux/slices/authSlice';
 const initialFormData = {
   userName: '',
   email: '',
@@ -15,7 +15,8 @@ const UpdateProfile = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
-
+  const dispatch = useDispatch();
+  console.log('Current user in UpdateProfilessssss:', currentUser);
   const onchangeHandler = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -29,7 +30,7 @@ const UpdateProfile = () => {
       setFormData({
         userName: currentUser.userName || '',
         email: currentUser.email || '',
-        mobileNo: currentUser.mobileNo || '',
+        mobileNo: currentUser.mobileNo || 'jkjj',
         password: '',
         showPassword: false,
       });
@@ -47,7 +48,7 @@ const UpdateProfile = () => {
     return validation;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     const validation = validateForm();
     setErrors(validation);
@@ -59,6 +60,7 @@ const UpdateProfile = () => {
       setMessage('Please log in before updating your profile.');
       return;
     }
+    await dispatch(updateUserAction(formData));
     setMessage('Profile changes saved locally in this demo.');
   };
 
@@ -105,7 +107,7 @@ const UpdateProfile = () => {
         </label>
 
         <label className="form-control">
-          <span>New password</span>
+          <span>Enter Current Password To Update Profile</span>
           <input
             type={formData.showPassword ? 'text' : 'password'}
             name="password"

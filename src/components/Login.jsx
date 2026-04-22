@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Login.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/slices/authSlice';
+import { login, clearError } from '../redux/slices/authSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login = () => {
@@ -15,6 +15,10 @@ const Login = () => {
   const location = useLocation();
   const logoutMessage = location.state?.message;
   const { error, loading } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   const onchangeHandler = (e) => {
     const { name, value } = e.target;

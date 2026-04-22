@@ -1,43 +1,63 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getUserByIdAction } from "../redux/slices/authSlice";
+import { loadAdminUsers, toggleAdminUserStatus } from "../redux/slices/adminSlice";
+import "./GetUserById.css";
+
 const GetUserById = () => {
-    console.log('GetUserById component rendered');
   const dispatch = useDispatch();
-  const { selectedUser, loading, error } = useSelector((state) => state.auth);  
-    const [userId, setUserId] = useState('');
+  const { users, loading, error } = useSelector((state) => state.admin);
     const { id } = useParams();
-    console.log('User ID from URL params:', id);
-    
-    // Optionally, you could dispatch an action here to fetch the user by ID if it's not already in the state
+    console.log('GetUserById component rendered with user ID:', id);
+  
+  const selectedUser = users.find((user) => user._id === id);
 
+ console.log('Selected user details:', selectedUser);
   useEffect(() => {
-    if (id) {
-      dispatch(getUserByIdAction(id));
+    if (!users.length) {
+      dispatch(loadAdminUsers());
     }
-    }, [dispatch, id]);
+  }, [dispatch, users.length]);
 
+  return (
+    <div className="get-user-page">
+      <div className="card">
+        <h2>User Details</h2>
 
+        {loading && <p className="loading">Loading user...</p>}
+        {error && <p className="error">{error}</p>}
 
-   console.log('Selected user from state:', selectedUser);
-    return (
-        <div className="get-user-page">
-            <h2>Get User By ID</h2>
-            {
-                selectedUser ? (
-                    <div className="user-details">
-                        <p><strong>ID:</strong> {selectedUser._id}</p>
-                        <p><strong>Name:</strong> {selectedUser.userName}</p>
-                        <p><strong>Email:</strong> {selectedUser.email}</p>
-                        <p><strong>Role:</strong> {selectedUser.role}</p>   
-                    </div>
-                ) : (
-                    <p>No user selected. Please enter a user ID to fetch details.</p>
-                )
-            }
-           </div>
-    );
-}
+        {selectedUser ? (
+          <div className="user-details">
+            <p><strong>Name:</strong> <span>{selectedUser.userName}</span></p>
+            <p><strong>Email:</strong> <span>{selectedUser.email}</span></p>
+            <p><strong>Role:</strong> <span>{selectedUser.role}</span></p>
+            <p><strong>Company:</strong> <span>{selectedUser.companyName}</span></p>
+            <p><strong>Mobile No:</strong> <span>{selectedUser.mobileNo}</span></p>
+            <p>
+              <strong>Status:</strong>{" "}
+              <span>
+                {selectedUser.approved
+                  ? selectedUser.isActive
+                    ? "Active"
+                    : "Inactive"
+                  : "Pending Approval"}
+              </span>
+            </p>
+
+            <button
+              className={selectedUser.isActive ? "deactivate-btn" : "activate-btn"}
+              onClick={() => dispatch(toggleAdminUserStatus(selectedUser._id))}
+            >
+              {selectedUser.isActive ? "Deactivate User" : "Activate User"}
+            </button>
+          </div>
+        ) : (
+          !loading && <p className="empty">User not found.</p>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default GetUserById;

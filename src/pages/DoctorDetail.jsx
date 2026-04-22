@@ -53,9 +53,26 @@ const DoctorDetail = () => {
           <span>City</span>
           <strong>{doctor.city || 'Not specified'}</strong>
         </div>
+        {doctor.location?.lat !== undefined && doctor.location?.lng !== undefined && (
+          <div className="detail-row">
+            <span>Location</span>
+            <strong>
+              {doctor.location.lat.toFixed(4)}, {doctor.location.lng.toFixed(4)}
+            </strong>
+          </div>
+        )}
         <div className="detail-row">
           <span>Contact</span>
           <strong>{doctor.contactNumber || 'Not provided'}</strong>
+        </div>
+        <div className="detail-row">
+          <span>Added by</span>
+          <strong>
+            {doctor.mr?.userName || doctor.mr?.email || 'Unknown'}
+            {doctor.mr?.role && (
+              <span> ({doctor.mr.role === 'admin' ? 'Admin' : 'MR'})</span>
+            )}
+          </strong>
         </div>
         <button className="primary-button" onClick={handleAddVisit}>
           Add visit for this doctor

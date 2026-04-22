@@ -16,8 +16,13 @@ import AddVisit from '../pages/AddVisit';
 import VisitHistory from '../pages/VisitHistory';
 import GetUserById from '../pages/GetUserById';
 import MrDashboard from '../pages/MrDashboard';
+import Doctors from '../pages/Doctors';
 import DoctorDetail from '../pages/DoctorDetail';
 import ResetPassword from '../components/ResetPassword';
+import Privacy from '../pages/Privacy';
+import Terms from '../pages/Terms';
+import LeaveManagement from '../pages/LeaveManagement';
+import LeaveRequests from '../pages/LeaveRequests';
 
 const AllRoutes = () => {
   return (
@@ -28,6 +33,8 @@ const AllRoutes = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
 
         <Route
           path="/dashboard"
@@ -48,21 +55,25 @@ const AllRoutes = () => {
           <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/leaves" element={<LeaveRequests />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['mr']} />}>
           <Route path="/mr-dashboard" element={<MrDashboard />} />
           <Route path="/mr/add-visit" element={<AddVisit />} />
-          <Route path="/mr/visit-history" element={<VisitHistory />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['mr', 'admin']} />}>
+          <Route path="/visits" element={<VisitHistory />} />
+          <Route path="/mr/visit-history" element={<VisitHistory />} />
+          <Route path="/doctors" element={<Doctors />} />
           <Route path="/doctors/:id" element={<DoctorDetail />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/leaves" element={<LeaveManagement />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

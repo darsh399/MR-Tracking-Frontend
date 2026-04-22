@@ -1,13 +1,35 @@
-import { Link } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
 import './Header.css';
-import { useNavigate } from 'react-router-dom';
 import { logout } from '../redux/slices/authSlice';
+import { Link } from 'react-router-dom';
+import logo from '../assets/logo.svg';
+import { useDarkMode } from '../context/DarkModeContext';
+
+const DarkModeToggle = () => {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  return (
+    <button
+      type="button"
+      className="dark-mode-header-toggle"
+      onClick={toggleDarkMode}
+      aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
+    >
+      {isDarkMode ? '☀️' : '🌙'}
+    </button>
+  );
+};
 
 const Header = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLogout = async () => {
     try {
@@ -26,21 +48,108 @@ const Header = () => {
       : '/dashboard'
     : '/login';
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const userInitial = currentUser?.userName?.charAt(0).toUpperCase() || 'U';
+  const isAuthenticated = Boolean(currentUser);
+
   return (
     <header className="site-header">
       <div className="header-inner">
         <Link className="brand" to="/">
-          MR Visit Tracker
+          <img src={logo} alt="MediTrack Pro Logo" className="logo-image" />
         </Link>
-        <nav className="nav-links">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
-          {currentUser ? <Link to={dashboardPath}>Dashboard</Link> : <Link to="/login">Login</Link>}
-          {currentUser && !currentUser.profileCompleted && <Link to="/complete-profile">Onboarding</Link>}
-          {currentUser ? <Link to="/profile">Profile</Link> : <Link to="/signup">Sign Up</Link>}
-          {currentUser && <button className="logout-button" onClick={handleLogout}>Logout</button>}
+
+        <nav className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
+          <NavLink end to="/" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+            Home
+          </NavLink>
+
+          {isAuthenticated ? (
+            <>
+              <NavLink to={dashboardPath} className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Dashboard
+              </NavLink>
+              <NavLink to="/doctors" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Doctors
+              </NavLink>
+              <NavLink to="/visits" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Visits
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                About Us
+              </NavLink>
+              <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>
+                Contact
+              </NavLink>
+            </>
+          )}
         </nav>
+
+        <button
+          type="button"
+          className="mobile-menu-toggle"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle mobile menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <DarkModeToggle />
+
+        <div className="header-action-group" ref={dropdownRef}>
+          {currentUser ? (
+            <button
+              type="button"
+              className="profile-button"
+              onClick={() => setDropdownOpen((open) => !open)}
+            >
+              <span>{userInitial}</span>
+            </button>
+          ) : (
+            <div className="auth-buttons">
+              <Link className="text-button" to="/login">Login</Link>
+              <Link className="primary-button" to="/signup">Sign Up</Link>
+            </div>
+          )}
+
+          {currentUser && (
+            <div className={`profile-dropdown ${dropdownOpen ? 'open' : ''}`}>
+              <div className="dropdown-header">
+                <strong>{currentUser.userName}</strong>
+                <span>{currentUser.role.toUpperCase()}</span>
+              </div>
+              <Link className="dropdown-item" to="/update-profile" onClick={() => setDropdownOpen(false)}>
+                Update Profile
+              </Link>
+              {currentUser.role !== 'admin' && (
+                <Link className="dropdown-item" to="/leaves" onClick={() => setDropdownOpen(false)}>
+                  Leaves
+                </Link>
+              )}
+              <Link className="dropdown-item" to="/reset-password" onClick={() => setDropdownOpen(false)}>
+                Reset Password
+              </Link>
+              <button type="button" className="dropdown-item logout-item" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

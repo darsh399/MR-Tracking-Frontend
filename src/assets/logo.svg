@@ -1,0 +1,29 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f9ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Medical cross icon -->
+  <g transform="translate(10, 15)">
+    <rect x="0" y="8" width="16" height="4" fill="url(#logoGradient)" rx="2"/>
+    <rect x="6" y="0" width="4" height="20" fill="url(#logoGradient)" rx="2"/>
+  </g>
+
+  <!-- Company name -->
+  <text x="35" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="url(#textGradient)">
+    MediTrack Pro
+  </text>
+
+  <!-- Tagline -->
+  <text x="35" y="42" font-family="Arial, sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">
+    Smart Visit Tracking
+  </text>
+</svg>

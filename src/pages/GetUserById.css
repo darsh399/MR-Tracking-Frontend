@@ -1,0 +1,90 @@
+/* Page Layout */
+.get-user-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eef2f7, #f8fafc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card Container */
+.card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 14px;
+  width: 380px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Title */
+.card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e293b;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* User Details */
+.user-details {
+  margin-top: 10px;
+}
+
+.user-details p {
+  margin: 12px 0;
+  font-size: 15px;
+  color: #334155;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 6px;
+}
+
+.user-details strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.user-details span {
+  color: #475569;
+  font-weight: 500;
+}
+
+/* States */
+.loading {
+  color: #2563eb;
+  font-weight: 500;
+  text-align: center;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: 500;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .card {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .card h2 {
+    font-size: 20px;
+  }
+}

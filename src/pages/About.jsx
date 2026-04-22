@@ -6,10 +6,10 @@ const About = () => {
     <div className="about-page">
       <section className="page-hero about-hero">
         <div>
-          <p className="eyebrow">About MR Visit Tracker</p>
+          <p className="eyebrow">About MediTrack Pro</p>
           <h1>Transform field visits into a modern SAAS workflow.</h1>
           <p>
-            MR Visit Tracker is a lightweight SaaS-style solution for medical representatives and company admins.
+            MediTrack Pro is a lightweight SaaS-style solution for medical representatives and company admins.
             It helps teams capture visit details, validate location data, manage employee access, and keep admin
             controls within the same company boundary.
           </p>

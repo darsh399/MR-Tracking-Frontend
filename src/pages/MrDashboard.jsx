@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { loadDoctors, addDoctor, clearDoctorMessage } from '../redux/slices/doctorSlice';
@@ -14,14 +14,47 @@ const MrDashboard = () => {
     clinicName: '',
     city: '',
     contactNumber: '',
+    latitude: '',
+    longitude: '',
   });
+  const [locationError, setLocationError] = useState('');
+  const [locationLoaded, setLocationLoaded] = useState(false);
+  const [altitude, setAltitude] = useState('');
+
+  const detectLocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported by your browser.');
+      setLocationLoaded(false);
+      return;
+    }
+
+    setLocationError('');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, altitude: positionAltitude } = position.coords;
+        setFormData((prev) => ({
+          ...prev,
+          latitude: latitude?.toFixed(6) || '',
+          longitude: longitude?.toFixed(6) || '',
+        }));
+        setAltitude(positionAltitude != null ? positionAltitude.toFixed(2) : 'Unavailable');
+        setLocationLoaded(true);
+      },
+      (error) => {
+        setLocationError(error.message || 'Unable to detect location.');
+        setLocationLoaded(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  }, []);
 
   useEffect(() => {
+    detectLocation();
     dispatch(loadDoctors());
     return () => {
       dispatch(clearDoctorMessage());
     };
-  }, [dispatch]);
+  }, [dispatch, detectLocation]);
 
   const cityOptions = useMemo(() => {
     const cities = doctors
@@ -47,7 +80,7 @@ const MrDashboard = () => {
 
     try {
       await dispatch(addDoctor(formData)).unwrap();
-      setFormData({ doctorName: '', specialty: '', clinicName: '', city: '', contactNumber: '' });
+      setFormData({ doctorName: '', specialty: '', clinicName: '', city: '', contactNumber: '', latitude: '', longitude: '' });
       dispatch(loadDoctors());
     } catch (submitError) {
       console.error('Failed to add doctor:', submitError);
@@ -125,6 +158,50 @@ const MrDashboard = () => {
                 placeholder="Enter contact number"
               />
             </label>
+            <div className="location-fieldset">
+              <div className="location-inputs">
+                <label>
+                  Latitude
+                  <input
+                    name="latitude"
+                    type="number"
+                    step="any"
+                    value={formData.latitude}
+                    readOnly
+                    placeholder="Auto-detected latitude"
+                  />
+                </label>
+                <label>
+                  Longitude
+                  <input
+                    name="longitude"
+                    type="number"
+                    step="any"
+                    value={formData.longitude}
+                    readOnly
+                    placeholder="Auto-detected longitude"
+                  />
+                </label>
+              </div>
+              <div className="location-actions">
+                <button type="button" className="secondary-button" onClick={detectLocation}>
+                  Detect current location
+                </button>
+                {locationLoaded && altitude && (
+                  <span className="altitude-label">Altitude: {altitude} m</span>
+                )}
+              </div>
+            </div>
+            {locationError && <p className="location-error">{locationError}</p>}
+            {locationLoaded && formData.latitude && formData.longitude && (
+              <div className="location-map">
+                <iframe
+                  title="Doctor location map"
+                  src={`https://www.google.com/maps?q=${formData.latitude},${formData.longitude}&z=16&output=embed`}
+                  loading="lazy"
+                />
+              </div>
+            )}
             <button type="submit" className="primary-button" disabled={loading}>
               {loading ? 'Saving doctor…' : 'Add doctor'}
             </button>
@@ -159,7 +236,16 @@ const MrDashboard = () => {
                   <p>{doctor.specialty}</p>
                   <p>{doctor.clinicName}</p>
                   <p>{doctor.city ? `City: ${doctor.city}` : 'City: not set'}</p>
+                  {doctor.location?.lat !== undefined && doctor.location?.lng !== undefined && (
+                    <p>Location: {doctor.location.lat.toFixed(4)}, {doctor.location.lng.toFixed(4)}</p>
+                  )}
                   {doctor.contactNumber && <p>Contact: {doctor.contactNumber}</p>}
+                  <p className="doctor-creator">
+                    Added by: {doctor.mr?.userName || doctor.mr?.email || 'Unknown'}
+                    {doctor.mr?.role && (
+                      <span> ({doctor.mr.role === 'admin' ? 'Admin' : 'MR'})</span>
+                    )}
+                  </p>
                 </li>
               ))}
             </ul>

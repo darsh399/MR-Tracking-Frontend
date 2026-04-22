@@ -132,6 +132,66 @@
   font-weight: 600;
 }
 
+.location-fieldset {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.location-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.location-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.secondary-button {
+  border: 1px solid #3b82f6;
+  background: #ffffff;
+  color: #2563eb;
+  border-radius: 16px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.secondary-button:hover {
+  background: rgba(59, 130, 246, 0.08);
+  transform: translateY(-1px);
+}
+
+.altitude-label {
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.location-map {
+  margin-bottom: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 240px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.location-map iframe {
+  width: 100%;
+  height: 240px;
+  border: 0;
+}
+
+.location-error {
+  margin: -6px 0 15px;
+  color: #b91c1c;
+  font-size: 0.95rem;
+}
+
 .success-message {
   background: #ecfdf5;
   color: #166534;
@@ -145,6 +205,101 @@
 }
 
 @media (max-width: 980px) {
+  .mr-dashboard {
+    padding: 24px 16px 40px;
+  }
+
+  .mr-dashboard h2 {
+    font-size: 2rem;
+  }
+
+  .mr-dashboard-actions {
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .doctor-management {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .doctor-setup,
+  .doctor-list {
+    padding: 24px;
+  }
+
+  .location-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .location-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .mr-dashboard {
+    padding: 20px 12px 30px;
+  }
+
+  .mr-dashboard h2 {
+    font-size: 1.8rem;
+  }
+
+  .mr-dashboard p {
+    font-size: 0.95rem;
+  }
+
+  .mr-dashboard-actions .button {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .doctor-setup,
+  .doctor-list {
+    padding: 20px;
+  }
+
+  .doctor-form label input,
+  .doctor-list select {
+    padding: 10px 12px;
+  }
+
+  .doctor-form button.primary-button {
+    padding: 12px 16px;
+  }
+
+  .doctor-cards {
+    gap: 14px;
+  }
+
+  .doctor-card {
+    padding: 16px;
+  }
+
+  .location-map {
+    min-height: 200px;
+  }
+
+  .location-map iframe {
+    height: 200px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mr-dashboard {
+    padding: 28px 18px 50px;
+  }
+
+  .doctor-management {
+    gap: 26px;
+  }
+
+  .doctor-setup,
+  .doctor-list {
+    padding: 26px;
+  }
+}
   .doctor-management {
     grid-template-columns: 1fr;
   }
