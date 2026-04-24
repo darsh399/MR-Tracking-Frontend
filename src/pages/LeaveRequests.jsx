@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loadLeaveRequests, requestLeave, clearLeaveMessage } from '../redux/slices/leaveSlice';
 import { loadUserProfile } from '../redux/slices/profileSlice';
 import './LeaveRequests.css';
 
 const LeaveRequests = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { requests: leaveRequests, loading, error, success } = useSelector((state) => state.leave);
   const { profile, loading: profileLoading } = useSelector((state) => state.profile);

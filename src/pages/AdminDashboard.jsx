@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { loadAdminStats, loadAdminUsers, approveAdminUser, rejectAdminUser, toggleAdminUserStatus } from '../redux/slices/adminSlice';
 import { loadLeaveRequests, updateLeaveStatus } from '../redux/slices/leaveSlice';
+import { loadDoctors } from '../redux/slices/doctorSlice';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -22,15 +23,17 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { stats, users, loading, error } = useSelector((state) => state.admin);
   const { requests: leaveRequests, loading: leaveLoading, error: leaveError, success: leaveSuccess } = useSelector((state) => state.leave);
+  const { doctors = [], loading: doctorsLoading } = useSelector((state) => state.doctors);
   const { currentUser } = useSelector((state) => state.auth);
   const [statusFilter, setStatusFilter] = useState('all');
-
+  const [doctorFilter, setDoctorFilter] = useState('');
   const pendingLeaveRequests = leaveRequests.filter(request => request.status === 'pending');
 
   useEffect(() => {
     dispatch(loadAdminStats());
     dispatch(loadAdminUsers());
     dispatch(loadLeaveRequests());
+    dispatch(loadDoctors());
   }, [dispatch]);
 
   useEffect(() => {
@@ -56,6 +59,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <section className="page-header">
         <h1>Admin Dashboard</h1>
         <p>Monitor MR performance, visit metrics, doctor popularity, and account approvals.</p>
@@ -184,6 +192,60 @@ const AdminDashboard = () => {
             ))
           )}
         </div>
+      </div>
+
+      {/* DOCTORS SECTION */}
+      <div className="doctors-section">
+        <div className="section-header">
+          <h2>👨‍⚕️ All Company Doctors</h2>
+          <input
+            type="text"
+            placeholder="Search doctor by name or specialty..."
+            value={doctorFilter}
+            onChange={(e) => setDoctorFilter(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
+        {doctorsLoading ? (
+          <div className="loading">Loading doctors...</div>
+        ) : doctors.length === 0 ? (
+          <p className="no-data">No doctors registered yet.</p>
+        ) : (
+          <div className="doctors-grid">
+            {doctors
+              .filter(
+                (doc) =>
+                  doc.doctorName?.toLowerCase().includes(doctorFilter.toLowerCase()) ||
+                  doc.specialty?.toLowerCase().includes(doctorFilter.toLowerCase())
+              )
+              .map((doctor) => (
+                <div
+                  key={doctor._id}
+                  className="doctor-card-admin"
+                  onClick={() => navigate(`/admin/doctor/${doctor._id}`)}
+                >
+                  <div className="doctor-card-header">
+                    <h3>{doctor.doctorName}</h3>
+                    <span className="specialty-badge">{doctor.specialty}</span>
+                  </div>
+                  <div className="doctor-card-body">
+                    <p className="clinic">🏥 {doctor.clinicName}</p>
+                    <p className="city">📍 {doctor.city || 'Not specified'}</p>
+                    <p className="contact">📱 {doctor.contactNumber || 'N/A'}</p>
+                    {doctor.mr && (
+                      <p className="added-by">
+                        Added by: <strong>{doctor.mr.userName || doctor.mr.email}</strong>
+                      </p>
+                    )}
+                  </div>
+                  <div className="doctor-card-footer">
+                    <button className="view-btn">View Details →</button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );

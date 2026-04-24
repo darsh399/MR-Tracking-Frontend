@@ -18,6 +18,7 @@ import GetUserById from '../pages/GetUserById';
 import MrDashboard from '../pages/MrDashboard';
 import Doctors from '../pages/Doctors';
 import DoctorDetail from '../pages/DoctorDetail';
+import AdminDoctorDetail from '../pages/AdminDoctorDetail';
 import ResetPassword from '../components/ResetPassword';
 import Privacy from '../pages/Privacy';
 import Terms from '../pages/Terms';
@@ -74,6 +75,7 @@ const AllRoutes = () => {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/leaves" element={<LeaveManagement />} />
+          <Route path="/admin/doctor/:id" element={<AdminDoctorDetail />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

@@ -84,6 +84,11 @@ const Signup = () => {
 
   return (
     <div className="auth-page" id="signup">
+      <div style={{ position: 'absolute', top: '20px', left: '20px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <form className="auth-card" onSubmit={handleSubmit}>
         <h2>Create an account</h2>
         <p className="form-subtitle">Select your user type and complete the form below.</p>

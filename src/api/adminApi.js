@@ -15,6 +15,8 @@ export const fetchUsersForAdmin = async () => {
   return response.data;
 };
 
+
+
 export const approveUser = async (userId) => {
   const response = await api.put(`/auth/approve/${userId}`);
   return response.data;

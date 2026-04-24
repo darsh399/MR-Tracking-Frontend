@@ -54,6 +54,11 @@ const Login = () => {
 
   return (
     <div className="auth-page">
+      <div style={{ position: 'absolute', top: '20px', left: '20px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <form className="auth-card" onSubmit={handleSubmit}>
         <h2>Login</h2>
         {logoutMessage && <div className="success-message">{logoutMessage}</div>}

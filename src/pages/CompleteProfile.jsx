@@ -103,6 +103,11 @@ const CompleteProfile = () => {
   return (
     <div className="complete-profile-page">
       <div className="profile-shell">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+          <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+            ← Back
+          </button>
+        </div>
         <header className="profile-header">
           <p className="eyebrow">Employee onboarding</p>
           <h1>Complete your profile</h1>

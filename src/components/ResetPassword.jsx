@@ -1,8 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "./ResetPassword.css";
 import { useState } from "react";
 import {resetUserPassword} from './../redux/slices/profileSlice.js';
 const ResetPassword = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         currentPassword: '',
         newPassword: ''
@@ -36,6 +38,11 @@ const ResetPassword = () => {
 
 return (
   <div className="reset-container">
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+      <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+        ← Back
+      </button>
+    </div>
     <form className="reset-card" onSubmit={formHandler}>
       <h1>{currentUser?.userName || "User"}</h1>
 
