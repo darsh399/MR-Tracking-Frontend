@@ -72,6 +72,12 @@ const AdminDashboard = () => {
         )}
       </section>
 
+      <div className="admin-dashboard-nav">
+        <button className="tab-button" type="button" onClick={() => navigate('/admin/send-mail')}>
+          Send mail to all employees
+        </button>
+      </div>
+
       {loading && <p className="status-message">Loading admin metrics…</p>}
       {error && <p className="error-message">{error}</p>}
 

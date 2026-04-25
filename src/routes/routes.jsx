@@ -12,6 +12,7 @@ import EmployeeDashboard from '../pages/EmployeeDashboard';
 import MainLayout from '../pages/MainLayout';
 import ProtectedRoute from '../components/ProtectedRoute';
 import AdminDashboard from '../pages/AdminDashboard';
+import AdminSendMail from '../pages/AdminSendMail';
 import AddVisit from '../pages/AddVisit';
 import VisitHistory from '../pages/VisitHistory';
 import GetUserById from '../pages/GetUserById';
@@ -74,6 +75,7 @@ const AllRoutes = () => {
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/send-mail" element={<AdminSendMail />} />
           <Route path="/admin/leaves" element={<LeaveManagement />} />
           <Route path="/admin/doctor/:id" element={<AdminDoctorDetail />} />
         </Route>

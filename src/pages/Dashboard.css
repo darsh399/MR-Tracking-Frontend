@@ -1,124 +1,172 @@
 .dashboard-page {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 36px 20px 60px;
+  padding: 32px 20px 60px;
+  background: var(--bg-secondary);
 }
 
 .dashboard-hero {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
   gap: 32px;
   align-items: center;
   margin-bottom: 40px;
 }
 
 .dashboard-copy {
-  max-width: 620px;
+  max-width: 600px;
 }
 
 .eyebrow {
   margin: 0 0 12px;
-  color: #4f7ef3;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  color: var(--primary-color);
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-size: 0.85rem;
 }
 
 .dashboard-copy h1 {
-  margin: 0 0 18px;
-  font-size: clamp(2rem, 3vw, 3.2rem);
-  color: #102a54;
+  margin: 0 0 16px;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .dashboard-copy p {
-  color: #525f7f;
-  line-height: 1.8;
+  color: var(--text-secondary);
+  line-height: 1.7;
   margin: 0 0 24px;
+  font-size: 1rem;
 }
 
 .dashboard-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 12px;
+}
+
+.dashboard-actions a,
+.dashboard-actions button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 .dashboard-summary {
-  background: linear-gradient(180deg, #ffffff, #eff3ff);
-  border-radius: 26px;
-  padding: 32px;
-  border: 1px solid rgba(79, 126, 243, 0.14);
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid var(--border-color);
   text-align: center;
+  box-shadow: var(--shadow-sm);
 }
 
 .role-badge {
   display: inline-flex;
-  padding: 10px 16px;
-  border-radius: 999px;
+  padding: 8px 14px;
+  border-radius: 6px;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .role-badge.user {
-  color: #1d4ed8;
-  background: rgba(79, 126, 243, 0.12);
+  color: var(--primary-color);
+  background: var(--primary-light);
 }
 
 .role-badge.admin {
-  color: #1e293b;
-  background: rgba(15, 23, 42, 0.12);
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
 }
 
 .dashboard-summary h2 {
   margin: 0 0 12px;
-  color: #102a54;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .role-description {
   margin: 0;
-  color: #4b5d7d;
-  line-height: 1.75;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(240px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
 .dashboard-card {
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 28px;
-  border: 1px solid rgba(76, 94, 153, 0.1);
-  box-shadow: 0 18px 45px rgba(63, 82, 153, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-smooth);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .dashboard-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 28px 70px rgba(63, 82, 153, 0.14);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .dashboard-card h3 {
-  margin: 0 0 14px;
-  color: #162b4d;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 600;
 }
 
 .dashboard-card p {
   margin: 0;
-  color: #4f5f7c;
-  line-height: 1.8;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
-@media (max-width: 980px) {
+.dashboard-card-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 24px 16px 40px;
+  }
+
   .dashboard-hero {
     grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .dashboard-copy h1 {
+    font-size: 1.8rem;
   }
 
   .dashboard-cards {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dashboard-card {
+    padding: 20px;
   }
 }

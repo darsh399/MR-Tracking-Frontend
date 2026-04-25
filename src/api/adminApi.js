@@ -31,3 +31,8 @@ export const toggleUserStatus = async (userId) => {
   const response = await api.put(`/auth/user/${userId}/status`);
   return response.data;
 };
+
+export const sendMailToAll = async (payload) => {
+  const response = await api.post('/admin/send-mail-all', payload);
+  return response.data;
+};

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, signupUser, updateUser, getUserById, fetchCurrentUser, logoutUser } from '../../api/authApi';
+import { loginUser, deleteUser, signupUser, updateUser, getUserById, fetchCurrentUser, logoutUser } from '../../api/authApi';
 
 const storedUser = localStorage.getItem('currentUser');
 const storedToken = localStorage.getItem('token');
@@ -64,6 +64,15 @@ export const updateUserAction = createAsyncThunk('auth/user-update', async(formD
     console.log('user update action triggered', formData)
     const response = await updateUser(formData);
     console.log('user action trigerred after response')
+    return response;
+  }catch(error){
+    return rejectWithValue(error.response?.data?.message || error.message);
+  }
+});
+
+export const deleteUserAction = createAsyncThunk('auth/user-delete', async(userId, {rejectWithValue}) => {
+  try{
+    const response = await deleteUser(userId);
     return response;
   }catch(error){
     return rejectWithValue(error.response?.data?.message || error.message);
@@ -156,7 +165,22 @@ const authSlice = createSlice({
        }).addCase(updateUserAction.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-       }) ;
+       })
+      .addCase(deleteUserAction.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUserAction.fulfilled, (state) => {
+        state.loading = false;
+        state.currentUser = null;
+        state.token = null;
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+      })
+      .addCase(deleteUserAction.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
