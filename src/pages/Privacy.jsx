@@ -1,8 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import './Privacy.css';
 
 const Privacy = () => {
+  const navigate = useNavigate();
   return (
     <div className="page-container">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <div className="page-header">
         <h1>Privacy Policy</h1>
         <p>Last updated: {new Date().toLocaleDateString()}</p>

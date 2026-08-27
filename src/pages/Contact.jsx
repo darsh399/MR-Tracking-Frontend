@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Contact.css';
 
 const Contact = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [status, setStatus] = useState('');
 
@@ -18,6 +20,11 @@ const Contact = () => {
 
   return (
     <div className="contact-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <section className="page-header contact-header">
         <h1>Contact us</h1>
         <p>Have a question about the platform, company setup, or your account? Send us a message.</p>

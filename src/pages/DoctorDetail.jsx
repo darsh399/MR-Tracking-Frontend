@@ -35,47 +35,103 @@ const DoctorDetail = () => {
 
   return (
     <div className="doctor-detail-page">
-      <section className="page-header">
-        <h1>{doctor.doctorName}</h1>
-        <p>Review this doctor's profile and click to add a new visit.</p>
-      </section>
+      <div className="detail-header">
+        <div>
+          <h1>{doctor.doctorName}</h1>
+          <p>Full doctor profile, MR owner, and clinic details.</p>
+        </div>
+        <button className="back-button" onClick={() => navigate(-1)}>
+          ← Back
+        </button>
+      </div>
 
-      <div className="doctor-detail-card">
-        <div className="detail-row">
-          <span>Specialty</span>
-          <strong>{doctor.specialty}</strong>
+      <div className="details-grid">
+        <div className="detail-card">
+          <h3>📋 General Information</h3>
+          <div className="info-row">
+            <span>Doctor Name</span>
+            <strong>{doctor.doctorName}</strong>
+          </div>
+          <div className="info-row">
+            <span>Specialty</span>
+            <strong>{doctor.specialty || 'Not specified'}</strong>
+          </div>
+          <div className="info-row">
+            <span>Clinic Name</span>
+            <strong>{doctor.clinicName || 'Not specified'}</strong>
+          </div>
+          <div className="info-row">
+            <span>City</span>
+            <strong>{doctor.city || 'Not specified'}</strong>
+          </div>
+          <div className="info-row">
+            <span>Created</span>
+            <strong>{doctor.createdAt ? new Date(doctor.createdAt).toLocaleDateString() : 'N/A'}</strong>
+          </div>
         </div>
-        <div className="detail-row">
-          <span>Clinic</span>
-          <strong>{doctor.clinicName}</strong>
-        </div>
-        <div className="detail-row">
-          <span>City</span>
-          <strong>{doctor.city || 'Not specified'}</strong>
-        </div>
-        {doctor.location?.lat !== undefined && doctor.location?.lng !== undefined && (
-          <div className="detail-row">
-            <span>Location</span>
+
+        <div className="detail-card">
+          <h3>📍 Contact & Location</h3>
+          <div className="info-row">
+            <span>Contact Number</span>
+            <strong>{doctor.contactNumber || 'Not provided'}</strong>
+          </div>
+          <div className="info-row">
+            <span>Coordinates</span>
             <strong>
-              {doctor.location.lat.toFixed(4)}, {doctor.location.lng.toFixed(4)}
+              {doctor.location?.lat !== undefined && doctor.location?.lng !== undefined
+                ? `${doctor.location.lat.toFixed(4)}, ${doctor.location.lng.toFixed(4)}`
+                : 'N/A'}
             </strong>
           </div>
-        )}
-        <div className="detail-row">
-          <span>Contact</span>
-          <strong>{doctor.contactNumber || 'Not provided'}</strong>
+          {doctor.location?.lat !== undefined && doctor.location?.lng !== undefined && (
+            <div className="map-container">
+              <iframe
+                title="Doctor Location"
+                src={`https://www.google.com/maps?q=${doctor.location.lat},${doctor.location.lng}&z=15&output=embed`}
+                loading="lazy"
+                frameBorder="0"
+              />
+            </div>
+          )}
         </div>
-        <div className="detail-row">
-          <span>Added by</span>
-          <strong>
-            {doctor.mr?.userName || doctor.mr?.email || 'Unknown'}
-            {doctor.mr?.role && (
-              <span> ({doctor.mr.role === 'admin' ? 'Admin' : 'MR'})</span>
-            )}
-          </strong>
+
+        <div className="detail-card">
+          <h3>👤 Added By</h3>
+          <div className="info-row">
+            <span>MR Name</span>
+            <strong>{doctor.mr?.userName || doctor.mr?.email || 'Unknown'}</strong>
+          </div>
+          <div className="info-row">
+            <span>MR Email</span>
+            <strong>{doctor.mr?.email || 'Not available'}</strong>
+          </div>
+          <div className="info-row">
+            <span>MR Role</span>
+            <strong>{doctor.mr?.role === 'admin' ? 'Admin' : 'MR'}</strong>
+          </div>
+          <div className="info-row">
+            <span>Company</span>
+            <strong>{doctor.companyName || 'Not available'}</strong>
+          </div>
         </div>
+
+        <div className="detail-card full-width">
+          <h3>🏥 Additional Details</h3>
+          <div className="info-row">
+            <span>Doctor ID</span>
+            <strong>{doctor._id}</strong>
+          </div>
+          <div className="info-row">
+            <span>Company ID</span>
+            <strong>{doctor.company || 'Not specified'}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="action-footer">
         <button className="primary-button" onClick={handleAddVisit}>
-          Add visit for this doctor
+          ➕ Add Visit
         </button>
       </div>
     </div>

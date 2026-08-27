@@ -15,6 +15,8 @@ export const fetchUsersForAdmin = async () => {
   return response.data;
 };
 
+
+
 export const approveUser = async (userId) => {
   const response = await api.put(`/auth/approve/${userId}`);
   return response.data;
@@ -27,5 +29,10 @@ export const rejectUser = async (userId) => {
 
 export const toggleUserStatus = async (userId) => {
   const response = await api.put(`/auth/user/${userId}/status`);
+  return response.data;
+};
+
+export const sendMailToAll = async (payload) => {
+  const response = await api.post('/admin/send-mail-all', payload);
   return response.data;
 };

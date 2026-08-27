@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { loadVisitHistory } from '../redux/slices/visitSlice';
 import './VisitHistory.css';
 
 const VisitHistory = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
   const { history, loading, error } = useSelector((state) => state.visits);
@@ -27,6 +29,11 @@ const VisitHistory = () => {
 
   return (
     <div className="visit-history-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <section className="page-header">
         <h1>{pageTitle}</h1>
         <p>{pageDescription}</p>

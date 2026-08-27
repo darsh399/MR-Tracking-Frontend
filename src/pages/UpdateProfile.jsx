@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AuthPage.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUserAction } from '../redux/slices/authSlice';
@@ -11,6 +12,7 @@ const initialFormData = {
 };
 
 const UpdateProfile = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
   const { currentUser } = useSelector((state) => state.auth);
   const [message, setMessage] = useState('');

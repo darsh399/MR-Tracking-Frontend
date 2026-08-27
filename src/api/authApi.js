@@ -30,3 +30,9 @@ export const updateUser = async (formData) => {
   const response = await api.patch('/auth/update-user', formData);
   return response.data;
 }
+
+
+export const deleteUser = async (userId) => {
+  const response = await api.delete(`/auth/user/${userId}`);
+  return response.data;
+}

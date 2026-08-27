@@ -6,7 +6,7 @@ import { logout } from '../redux/slices/authSlice';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { useDarkMode } from '../context/DarkModeContext';
-
+import { deleteUserAction } from '../redux/slices/authSlice';
 const DarkModeToggle = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
@@ -30,7 +30,7 @@ const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+console.log('Current user in Header:', currentUser);
   const handleLogout = async () => {
     try {
       await dispatch(logout()).unwrap();
@@ -39,6 +39,27 @@ const Header = () => {
       navigate('/login', { replace: true, state: { message: 'Logout successful' } });
     } catch (error) {
       console.error('Logout failed', error);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const userId = currentUser?.id || currentUser?._id;
+    if (!userId) {
+      console.error('Unable to delete account: missing user ID', currentUser);
+      alert('Unable to delete account right now. Please refresh and try again.');
+      return;
+    }
+
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      try {
+        await dispatch(deleteUserAction(userId)).unwrap();
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        navigate('/signup', { replace: true, state: { message: 'Account deleted successfully' } });
+      } catch (error) {
+        console.error('Account deletion failed', error);
+        alert('Failed to delete account. Please try again later.');
+      }
     }
   };
 
@@ -100,7 +121,7 @@ const Header = () => {
 
         <button
           type="button"
-          className="mobile-menu-toggle"
+          className={`mobile-menu-toggle ${mobileMenuOpen ? 'open' : ''}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle mobile menu"
         >
@@ -144,6 +165,9 @@ const Header = () => {
               <Link className="dropdown-item" to="/reset-password" onClick={() => setDropdownOpen(false)}>
                 Reset Password
               </Link>
+              <button type="button" className="dropdown-item delete-item" onClick={handleDeleteAccount}>
+                Delete Account
+              </button>
               <button type="button" className="dropdown-item logout-item" onClick={handleLogout}>
                 Logout
               </button>

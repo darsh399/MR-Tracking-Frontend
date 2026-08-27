@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchDashboardStats, fetchAdminVisits, fetchUsersForAdmin, approveUser, rejectUser, toggleUserStatus } from '../../api/adminApi';
+import { fetchDashboardStats, fetchAdminVisits, fetchUsersForAdmin, approveUser, rejectUser, toggleUserStatus, sendMailToAll } from '../../api/adminApi';
 
 const initialState = {
   stats: null,
@@ -7,7 +7,12 @@ const initialState = {
   users: [],
   loading: false,
   error: null,
+  emailStatus: null,
+  emailError: null,
+  emailResult: null,
 };
+
+
 
 export const loadAdminStats = createAsyncThunk('admin/loadStats', async (_, { rejectWithValue }) => {
   try {
@@ -30,6 +35,15 @@ export const loadAdminVisits = createAsyncThunk('admin/loadVisits', async (filte
 export const loadAdminUsers = createAsyncThunk('admin/loadUsers', async (_, { rejectWithValue }) => {
   try {
     const response = await fetchUsersForAdmin();
+    return response;
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || error.message);
+  }
+});
+
+export const sendCompanyEmail = createAsyncThunk('admin/sendCompanyEmail', async (payload, { rejectWithValue }) => {
+  try {
+    const response = await sendMailToAll(payload);
     return response;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || error.message);
@@ -106,6 +120,19 @@ const adminSlice = createSlice({
       .addCase(loadAdminUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(sendCompanyEmail.pending, (state) => {
+        state.emailStatus = 'pending';
+        state.emailError = null;
+        state.emailResult = null;
+      })
+      .addCase(sendCompanyEmail.fulfilled, (state, action) => {
+        state.emailStatus = 'success';
+        state.emailResult = action.payload;
+      })
+      .addCase(sendCompanyEmail.rejected, (state, action) => {
+        state.emailStatus = 'error';
+        state.emailError = action.payload;
       })
       .addCase(approveAdminUser.fulfilled, (state, action) => {
         state.users = state.users.map((user) =>

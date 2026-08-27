@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loadDoctors, addDoctor, clearDoctorMessage } from '../redux/slices/doctorSlice';
 import './MrDashboard.css';
 
 const MrDashboard = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { doctors, loading, error, message } = useSelector((state) => state.doctors);
   const [cityFilter, setCityFilter] = useState('');
@@ -89,6 +90,11 @@ const MrDashboard = () => {
 
   return (
     <div className="mr-dashboard">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <h2>MR Dashboard</h2>
       <p>Welcome to your MR dashboard! Log doctor visits, add city-aware doctors, and filter by city.</p>
 

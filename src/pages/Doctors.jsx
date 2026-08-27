@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loadDoctors } from '../redux/slices/doctorSlice';
 import './Doctors.css';
 
 const Doctors = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { doctors, loading, error } = useSelector((state) => state.doctors);
   const [cityFilter, setCityFilter] = useState('');
@@ -25,6 +26,11 @@ const Doctors = () => {
 
   return (
     <div className="doctors-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <header className="doctors-header">
         <h2>All Doctors</h2>
         <p>View every doctor in your company. Click a card to see full details.</p>

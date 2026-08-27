@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { submitVisit, clearVisitMessage } from '../redux/slices/visitSlice';
 import './AddVisit.css';
 
 const AddVisit = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const locationState = useLocation();
   const { loading, error, message } = useSelector((state) => state.visits);
@@ -77,6 +78,11 @@ const AddVisit = () => {
 
   return (
     <div className="add-visit-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <section className="page-header">
         <h1>Add Doctor Visit</h1>
         <p>Record a new doctor visit and capture location automatically.</p>

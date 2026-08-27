@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUserProfile } from '../redux/slices/profileSlice';
 import { loadCurrentUser } from '../redux/slices/authSlice';
@@ -8,6 +8,7 @@ import './AuthPage.css';
 import './Profile.css';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser, loading: userLoading } = useSelector((state) => state.auth);
   const { profile, loading: profileLoading } = useSelector((state) => state.profile);
@@ -90,6 +91,11 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+        <button onClick={() => navigate(-1)} style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '14px' }}>
+          ← Back
+        </button>
+      </div>
       <div className="profile-header">
         <div>
           <p className="eyebrow">Your employee profile</p>
